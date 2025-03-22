@@ -1,4 +1,10 @@
 # Budgie
+## About This Project
+
+This project is inspired by [`ChristianAlexander - tutorial-budget-app`](https://github.com/ChristianAlexander/tutorial-budget-app/tree/main) and serves as a practice for learning Phoenix and Elixir.
+The goal is to gain hands-on experience with Phoenix while building a functional application.
+
+## How to start
 
 To start your Phoenix server:
 
