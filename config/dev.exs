@@ -6,6 +6,7 @@ config :budgie, Budgie.Repo,
   password: "postgres",
   hostname: "localhost",
   database: "budgie_dev",
+  port: 4444,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
