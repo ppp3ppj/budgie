@@ -22,6 +22,10 @@ defmodule Budgie.Tracking.Budget do
     |> validate_required([:name, :start_date, :end_date, :creator_id])
     |> validate_length(:name, max: 100)
     |> validate_length(:description, max: 150)
-
+    |> check_constraint(:end_date,
+      name: :budget_end_after_start,
+      message: "must end after start date"
+    )
   end
 end
+
