@@ -16,7 +16,7 @@ defmodule BudgieWeb.BudgetListLive do
     ~H"""
     <.modal
       :if={@live_action == :new}
-      id="create-budget-model"
+      id="create-budget-modal"
       on_cancel={JS.navigate(~p"/budgets", replace: true)}
       show
     >

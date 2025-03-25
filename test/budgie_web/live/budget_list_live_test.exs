@@ -23,4 +23,13 @@ defmodule BudgieWeb.Live.BudgetListLiveTest do
       assert html =~ budget.description
     end
   end
+
+  describe "Create budget model" do
+    test "message", %{conn: conn, user: user} do
+      conn = log_in_user(conn, user)
+      {:ok, lv, _html} = live(conn, ~p"/budgets/new")
+
+      assert has_element?(lv, "#create-budget-modal")
+    end
+  end
 end
