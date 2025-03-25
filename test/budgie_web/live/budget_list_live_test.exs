@@ -31,5 +31,22 @@ defmodule BudgieWeb.Live.BudgetListLiveTest do
 
       assert has_element?(lv, "#create-budget-modal")
     end
+
+    test "validation errors are presented when form is changed with invalid input", %{
+      conn: conn,
+      user: user
+    } do
+      conn = log_in_user(conn, user)
+      {:ok, lv, _html} = live(conn, ~p"/budgets/new")
+
+      form = element(lv, "#create-budget-modal form")
+
+      html =
+        render_change(form, %{
+          "budget" => %{"name" => ""}
+        })
+
+      assert html =~ html_escape("can't be blank")
+    end
   end
 end
