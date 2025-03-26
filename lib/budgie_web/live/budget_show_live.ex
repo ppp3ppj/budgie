@@ -1,4 +1,4 @@
-defmodule BudgieWeb.Live.BudgetShowLive do
+defmodule BudgieWeb.BudgetShowLive do
   use BudgieWeb, :live_view
 
   alias Budgie.Tracking
