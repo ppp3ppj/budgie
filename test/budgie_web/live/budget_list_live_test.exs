@@ -1,4 +1,5 @@
 defmodule BudgieWeb.Live.BudgetListLiveTest do
+  alias Budgie.Tracking
   use BudgieWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
@@ -47,6 +48,33 @@ defmodule BudgieWeb.Live.BudgetListLiveTest do
         })
 
       assert html =~ html_escape("can't be blank")
+    end
+
+    test "creates a budget", %{conn: conn, user: user} do
+      conn = log_in_user(conn, user)
+      {:ok, lv, _html} = live(conn, ~p"/budgets/new")
+
+      form = form(lv, "#create-budget-modal form")
+
+      {:ok, _lv, html} =
+        render_submit(form, %{
+          "budget" => %{
+            "name" => "A new name",
+            "description" => "The new description",
+            "start_date" => "2025-01-01",
+            "end_date" => "2025-01-31"
+          }
+        })
+        |> follow_redirect(conn)
+
+      assert html =~ "Budget created"
+      assert html =~ "A new name"
+
+      assert [created_budget] = Tracking.list_budgets()
+      assert created_budget.name == "A new name"
+      assert created_budget.description == "The new description"
+      assert created_budget.start_date == ~D[2025-01-01]
+      assert created_budget.end_date == ~D[2025-01-31]
     end
   end
 end
