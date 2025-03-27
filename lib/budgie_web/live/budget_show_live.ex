@@ -14,7 +14,7 @@ defmodule BudgieWeb.BudgetShowLive do
     else
       socket =
         socket
-        |> put_flash(:errorn, "Budget not found")
+        |> put_flash(:error, "Budget not found")
         |> redirect(to: ~p"/budgets")
 
       {:ok, socket}
