@@ -6,8 +6,10 @@ defmodule BudgieWeb.BudgetShowLive do
   @impl true
   def mount(%{"budget_id" => id}, _session, socket) do
     budget =
-      Tracking.get_budget(id)
-      |> Budgie.Repo.preload(:creator)
+      Tracking.get_budget(id,
+        user: socket.assigns.current_user,
+        preload: :creator
+      )
 
     if budget do
       {:ok, assign(socket, budget: budget)}
