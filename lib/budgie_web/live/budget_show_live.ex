@@ -4,7 +4,7 @@ defmodule BudgieWeb.BudgetShowLive do
   alias Budgie.Tracking
 
   @impl true
-  def mount(%{"budget_id" => id}, _session, socket) do
+  def mount(%{"budget_id" => id}, _session, socket) when is_uuid(id) do
     budget =
       Tracking.get_budget(id,
         user: socket.assigns.current_user,
