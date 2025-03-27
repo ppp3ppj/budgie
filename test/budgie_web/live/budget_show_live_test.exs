@@ -31,7 +31,10 @@ defmodule BudgieWeb.Live.BudgetShowLiveTest do
       assert %{"error" => "Budget not found"} = conn.assigns.flash
     end
 
-    test "redirects to budget list page when budget is hidden from the user", %{conn: conn, budget: budget} do
+    test "redirects to budget list page when budget is hidden from the user", %{
+      conn: conn,
+      budget: budget
+    } do
       other_user = Budgie.AccountsFixtures.user_fixture()
 
       conn = log_in_user(conn, other_user)
@@ -40,9 +43,7 @@ defmodule BudgieWeb.Live.BudgetShowLiveTest do
         live(conn, ~p"/budgets/#{budget}")
         |> follow_redirect(conn, ~p"/budgets")
 
-
       assert %{"error" => "Budget not found"} = conn.assigns.flash
     end
   end
 end
-
