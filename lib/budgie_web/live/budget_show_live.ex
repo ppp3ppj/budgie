@@ -23,6 +23,15 @@ defmodule BudgieWeb.BudgetShowLive do
     end
   end
 
+  def mount(_invalid_id, _session, socket) do
+    socket =
+      socket
+      |> put_flash(:error, "Budgie not found")
+      |> redirect(to: ~p"/budgets")
+
+    {:ok, socket}
+  end
+
   @impl true
   def render(assigns) do
     ~H"""
