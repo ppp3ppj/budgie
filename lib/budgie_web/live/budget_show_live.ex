@@ -12,7 +12,10 @@ defmodule BudgieWeb.BudgetShowLive do
       )
 
     if budget do
-      {:ok, assign(socket, budget: budget)}
+      transactions =
+        Tracking.list_transactions(budget)
+
+      {:ok, assign(socket, budget: budget, transactions: transactions)}
     else
       socket =
         socket
@@ -58,6 +61,12 @@ defmodule BudgieWeb.BudgetShowLive do
         <span>New Transaction</span>
       </.link>
     </div>
+
+    <.table id="transactions" rows={@transactions}>
+      <:col :let={transaction} label="Description">{transaction.description}</:col>
+      <:col :let={transaction} label="Date">{transaction.effective_date}</:col>
+      <:col :let={transaction} label="Amount">{transaction.amount}</:col>
+    </.table>
     """
   end
 end
