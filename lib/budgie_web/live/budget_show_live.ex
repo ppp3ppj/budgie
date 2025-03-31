@@ -35,7 +35,29 @@ defmodule BudgieWeb.BudgetShowLive do
   @impl true
   def render(assigns) do
     ~H"""
-    {@budget.name} by {@budget.creator.name}
+    <.modal
+      :if={@live_action == :new_transaction}
+      id="create-transaction-modal"
+      on_cancel={JS.navigate(~p"/budgets/#{@budget}", replace: true)}
+      show
+    >
+      <.live_component
+        module={BudgieWeb.CreateTransactionDialog}
+        id="create-transaction"
+        budget={@budget}
+      />
+    </.modal>
+
+    <div class="flex justify-between items-center">
+      <div>{@budget.name} by {@budget.creator.name}</div>
+      <.link
+        navigate={~p"/budgets/#{@budget}/new-transaction"}
+        class="bg-blue-100 text-blue-800 hover:bg-blue-200 px-3 py-2 rounded-lg inline-flex items-center gap-2"
+      >
+        <.icon name="hero-plus" class="h-5 w-5" />
+        <span>New Transaction</span>
+      </.link>
+    </div>
     """
   end
 end

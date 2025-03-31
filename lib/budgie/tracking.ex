@@ -1,6 +1,7 @@
 defmodule Budgie.Tracking do
   import Ecto.Query, warn: false
 
+  alias Budgie.Tracking.BudgetTransaction
   alias Budgie.Repo
   alias Budgie.Tracking.Budget
 
@@ -37,5 +38,44 @@ defmodule Budgie.Tracking do
 
   def change_budget(budget, attrs \\ %{}) do
     Budget.changeset(budget, attrs)
+  end
+
+  def create_transaction(attrs \\ %{}) do
+    %BudgetTransaction{}
+    |> BudgetTransaction.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def list_transactions(budget_or_budget_id, criteria \\ [])
+
+  def list_transactions(%Budget{id: budget_id}, criteria),
+    do: list_transactions(budget_id, criteria)
+
+  def list_transactions(budget_id, criteria) do
+    transaction_query([{:budget, budget_id} | criteria])
+    |> Repo.all()
+  end
+
+  def transaction_query(criteria) do
+    query = from(t in BudgetTransaction, order_by: [asc: :effective_date])
+
+    Enum.reduce(criteria, query, fn
+      {:budget, budget_id}, query ->
+        from t in query, where: t.budget_id == ^budget_id
+
+      {:order_by, binding}, query ->
+        from t in exclude(query, :order_by), order_by: ^binding
+
+      {:preload, bindings}, query ->
+        preload(query, ^bindings)
+
+      _, query ->
+        query
+    end)
+  end
+
+
+  def change_transaction(budget, attrs \\ %{}) do
+    BudgetTransaction.changeset(budget, attrs)
   end
 end
