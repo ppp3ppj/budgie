@@ -4,6 +4,12 @@ defmodule Budgie.Factory do
   alias Budgie.Accounts
   alias Budgie.Tracking
 
+  def without_preloads(objects) when is_list(objects), do: Enum.map(objects, &without_preloads/1)
+  def without_preloads(%Tracking.Budget{} = budget), do: Ecto.reset_fields(budget, [:creator])
+
+  def without_preloads(%Tracking.BudgetTransaction{} = transaction),
+    do: Ecto.reset_fields(transaction, [:budget])
+
   def user_factory do
     %Accounts.User{
       name: sequence(:user_name, &"PPP Budgie#{&1}"),
