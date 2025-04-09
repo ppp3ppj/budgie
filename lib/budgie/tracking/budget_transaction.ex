@@ -23,7 +23,7 @@ defmodule Budgie.Tracking.BudgetTransaction do
     |> cast(attrs, [:effective_date, :type, :amount, :description, :budget_id])
     |> validate_required([:effective_date, :type, :amount, :description, :budget_id])
     |> validate_number(:amount,
-      greater_than_or_equal_to: 0,
+      greater_than: 0,
       less_than_or_equal_to: @maximum_transaction_amount
     )
   end
