@@ -2,13 +2,11 @@ defmodule BudgieWeb.Live.BudgetShowLiveTest do
   use BudgieWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
-  import Budgie.TrackingFixtures
 
   setup do
-    user = Budgie.AccountsFixtures.user_fixture()
-    budget = budget_fixture(%{creator_id: user.id})
+    budget = insert(:budget)
 
-    %{user: user, budget: budget}
+    %{budget: budget, user: budget.creator}
   end
 
   describe "Show budget" do

@@ -3,17 +3,14 @@ defmodule BudgieWeb.Live.BudgetListLiveTest do
   use BudgieWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
-  import Budgie.TrackingFixtures
 
   setup do
-    user = Budgie.AccountsFixtures.user_fixture()
-
-    %{user: user}
+    %{user: insert(:user)}
   end
 
   describe "Index view" do
     test "show budget when one exists", %{conn: conn, user: user} do
-      budget = budget_fixture(%{creator_id: user.id})
+      budget = insert(:budget, creator: user)
 
       conn = log_in_user(conn, user)
       {:ok, _lv, html} = live(conn, ~p"/budgets")
