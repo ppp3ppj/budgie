@@ -145,6 +145,15 @@ defmodule Budgie.TrackingTest do
                Tracking.change_transaction(%BudgetTransaction{}, @invalid_attrs)
     end
 
+    test "change_transaction/1 with negative amount returns an error" do
+      params =
+        params_with_assocs(:budget_transaction)
+        |> Map.put(:amount, Decimal.new("-1"))
+
+      assert %Ecto.Changeset{valid?: false} =
+               Tracking.change_transaction(%BudgetTransaction{}, params)
+    end
+
     test "change_transaction/1 with HUGE amount returns an error" do
       params =
         params_with_assocs(:budget_transaction)
@@ -152,6 +161,33 @@ defmodule Budgie.TrackingTest do
 
       assert %Ecto.Changeset{valid?: false} =
                Tracking.change_transaction(%BudgetTransaction{}, params)
+    end
+
+    test "summarize_budget_transactions/1 doesn't fail without transactions" do
+      budget = insert(:budget)
+
+      assert Tracking.summarize_budget_transaction(budget) == %{}
+    end
+
+    test "returns a summary with funding and spending" do
+      budget = insert(:budget)
+
+      spending_transactions = [
+        insert(:budget_transaction, budget: budget, type: :spending, amount: Decimal.new("2")),
+        insert(:budget_transaction, budget: budget, type: :spending, amount: Decimal.new("3"))
+      ]
+
+      funding_transactions = [
+        insert(:budget_transaction, budget: budget, type: :funding, amount: Decimal.new("5")),
+        insert(:budget_transaction, budget: budget, type: :funding, amount: Decimal.new("7"))
+      ]
+
+      assert Tracking.summarize_budget_transaction(budget.id) == %{
+               spending:
+                 Enum.reduce(spending_transactions, Decimal.new("0"), &Decimal.add(&1.amount, &2)),
+               funding:
+                 Enum.reduce(funding_transactions, Decimal.new("0"), &Decimal.add(&1.amount, &2))
+             }
     end
   end
 end
