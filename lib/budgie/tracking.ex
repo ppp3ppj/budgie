@@ -74,8 +74,8 @@ defmodule Budgie.Tracking do
     end)
   end
 
-  def change_transaction(budget, attrs \\ %{}) do
-    BudgetTransaction.changeset(budget, attrs)
+  def change_transaction(budget_transaction, attrs \\ %{}) do
+    BudgetTransaction.changeset(budget_transaction, attrs)
   end
 
   def summarize_budget_transaction(%Budget{id: budget_id}),
