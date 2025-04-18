@@ -2,6 +2,8 @@ defmodule BudgieWeb.Live.BudgetShowLiveTest do
   use BudgieWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
+  alias Budget.Repo
+  alias Budgie.Tracking.BudgetTransaction
 
   setup do
     budget = insert(:budget)
@@ -50,7 +52,7 @@ defmodule BudgieWeb.Live.BudgetShowLiveTest do
       conn = log_in_user(conn, user)
       {:ok, lv, _html} = live(conn, ~p"/budgets/#{budget}/new-transaction")
 
-      assert has_element?(lv, "#create-transaction-modal")
+      assert has_element?(lv, "#transaction-modal")
     end
  test "creates a transaction", %{
       conn: conn,
@@ -63,7 +65,7 @@ defmodule BudgieWeb.Live.BudgetShowLiveTest do
       params = params_for(:budget_transaction)
 
       form =
-        form(lv, "#create-transaction-modal form", %{
+        form(lv, "#transaction-modal form", %{
           "transaction" => params
         })
 
@@ -86,7 +88,7 @@ defmodule BudgieWeb.Live.BudgetShowLiveTest do
       params = params_for(:budget_transaction, amount: Decimal.new("-42"))
 
       form =
-        form(lv, "#create-transaction-modal form", %{
+        form(lv, "#transaction-modal form", %{
           "transaction" => params
         })
 
@@ -106,7 +108,7 @@ defmodule BudgieWeb.Live.BudgetShowLiveTest do
       params = params_for(:budget_transaction, amount: Decimal.new("-42"))
 
       form =
-        form(lv, "#create-transaction-modal form", %{
+        form(lv, "#transaction-modal form", %{
           "transaction" => params
         })
 
