@@ -7,7 +7,7 @@ defmodule Budgie.Tracking.BudgetPeriod do
   schema "budget_periods" do
     field :start_date, :date
     field :end_date, :date
-    field :budget_id, :binary_id
+    belongs_to :budget, Budgie.Tracking.Budget
 
     timestamps(type: :utc_datetime)
   end
@@ -15,7 +15,12 @@ defmodule Budgie.Tracking.BudgetPeriod do
   @doc false
   def changeset(budget_period, attrs) do
     budget_period
-    |> cast(attrs, [:start_date, :end_date])
-    |> validate_required([:start_date, :end_date])
+    |> cast(attrs, [:start_date, :end_date, :budget_id])
+    |> validate_required([:start_date, :end_date, :budget_id])
+    |> check_constraint(:end_date,
+      name: :end_after_start,
+      message: "must end after start date"
+    )
+    |> unique_constraint([:budget_id, :start_date])
   end
 end
