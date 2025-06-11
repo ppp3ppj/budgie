@@ -28,6 +28,7 @@ defmodule Budgie.Tracking.Budget do
       name: :budget_end_after_start,
       message: "must end after start date"
     )
+    |> unique_constraint([:buget_id, :start_date])
   end
 end
 
