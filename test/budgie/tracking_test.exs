@@ -47,7 +47,7 @@ defmodule Budgie.TrackingTest do
         )
 
       assert {:error, %Ecto.Changeset{} = changeset} = Tracking.create_budget(attrs)
-      assert %{end_date: ["must end after start date"]} = errors_on(changeset)
+      assert %{end_date: ["must be the end of a month"]} = errors_on(changeset)
 
       assert changeset.valid? == false
       # dbg(changeset)
