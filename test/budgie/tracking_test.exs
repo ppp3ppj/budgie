@@ -42,12 +42,12 @@ defmodule Budgie.TrackingTest do
     test "create_budget/1 with requires valid dates" do
       attrs =
         params_with_assocs(:budget,
-          start_date: ~D[2025-01-31],
-          end_date: ~D[2025-01-01]
+          start_date: ~D[2025-12-01],
+          end_date: ~D[2025-01-31]
         )
 
       assert {:error, %Ecto.Changeset{} = changeset} = Tracking.create_budget(attrs)
-      assert %{end_date: ["must be the end of a month"]} = errors_on(changeset)
+      assert %{end_date: ["must end after start date"]} = errors_on(changeset)
 
       assert changeset.valid? == false
       # dbg(changeset)
