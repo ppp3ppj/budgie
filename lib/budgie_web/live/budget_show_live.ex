@@ -30,7 +30,7 @@ defmodule BudgieWeb.BudgetShowLive do
     budget =
       Tracking.get_budget(id,
         user: socket.assigns.current_user,
-        preload: :creator
+        preload: [:creator, :periods]
       )
 
     if budget do
