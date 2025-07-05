@@ -58,7 +58,18 @@
 </div>
 
 <div class="grid grid-cols-1 gap-4 mt-6">
-  <div
+<.link
+  :for={period <- @budget.periods}
+  navigate={~p"/budgets/#{@budget}/periods/#{period}"}
+
+>
+    <div class="flex justify-between items-center mb-3">
+      <h3 class="font-medium text-gray-900">
+        {period.start_date}
+      </h3>
+    </div>
+</.link>
+<div
     :for={period <- @budget.periods}
     class="bg-white rounded shadow-sm p-4 cursor-pointer hover:shadow-md transition-shadow"
   >

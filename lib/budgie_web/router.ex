@@ -72,6 +72,9 @@ defmodule BudgieWeb.Router do
       live "/budgets/:budget_id", BudgetShowLive
       live "/budgets/:budget_id/new-transaction", BudgetShowLive, :new_transaction
       live "/budgets/:budget_id/transactions/:transaction_id/edit", BudgetShowLive, :edit_transaction
+
+      live "/budgets/:budget_id/periods/:id", PeriodShowLive
+
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end

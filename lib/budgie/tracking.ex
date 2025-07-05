@@ -4,6 +4,7 @@ defmodule Budgie.Tracking do
   alias Budgie.Tracking.BudgetTransaction
   alias Budgie.Repo
   alias Budgie.Tracking.Budget
+  alias Budgie.Tracking.BudgetPeriod
 
   def create_budget(attrs \\ %{}) do
     %Budget{}
@@ -79,6 +80,13 @@ defmodule Budgie.Tracking do
       {:preload, bindings}, query ->
         preload(query, ^bindings)
 
+      {:between, {start_date, end_date}}, query ->
+        where(
+          query,
+          [t],
+          fragment("? BETWEEN ? AND ?", t.effective_date, ^start_date, ^end_date)
+        )
+
       _, query ->
         query
     end)
@@ -104,4 +112,27 @@ defmodule Budgie.Tracking do
     end)
   end
 
+  def get_budget_period(id, criteria \\ []) do
+    Repo.get(budget_period_query(criteria), id)
+  end
+
+  defp budget_period_query(criteria) do
+    query = from(p in BudgetPeriod)
+
+    Enum.reduce(criteria, query, fn
+      {:user, user}, query ->
+        from p in query,
+          join: b in assoc(p, :budget),
+          where: b.creator_id == ^user.id
+
+      {:budget_id, budget_id}, query ->
+        from p in query, where: p.budget_id == ^budget_id
+
+      {:preload, bindings}, query ->
+        preload(query, ^bindings)
+
+      _, query ->
+        query
+    end)
+  end
 end
